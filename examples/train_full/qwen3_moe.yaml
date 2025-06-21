@@ -1,0 +1,48 @@
+### model
+model_name_or_path: Qwen/Qwen3-30B-A3B-Base
+trust_remote_code: true
+
+### method
+stage: sft
+do_train: true
+finetuning_type: full
+# deepspeed: examples/deepspeed/ds_z2_config.json  # choices: [ds_z0_config.json, ds_z2_config.json, ds_z3_config.json]
+
+### dataset
+dataset: identity,alpaca_en_demo
+# dataset:
+  # - chat_nvidia_nemotron_40K_rewriteall_0607
+  # - fc_toolace_5K
+
+
+template: qwen
+cutoff_len: 8192
+# tokenized_path: /scratch/yifei/CodeReasoning/tokenized_data/0608_qwen3_14b_base_qwen_template_general_data_fix
+
+overwrite_cache: true
+preprocessing_num_workers: 64
+
+
+### output
+output_dir: /scratch/yizhu1/debug_moe/
+# save_strategy: steps
+save_strategy: epoch
+# save_steps: 3000
+logging_steps: 1
+plot_loss: true
+
+
+### train
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 16
+learning_rate: 5.0e-6
+num_train_epochs: 3.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.04
+bf16: true
+ddp_timeout: 180000000
+flash_attn: fa2
+
+
+report_to: tensorboard
+# run_name: 0616_qwen3_30b_a3b_debug

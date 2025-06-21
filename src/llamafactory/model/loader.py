@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import os
+import types
 from typing import TYPE_CHECKING, Any, Optional, TypedDict
 
 import torch
@@ -34,6 +35,7 @@ from .adapter import init_adapter
 from .model_utils.liger_kernel import apply_liger_kernel
 from .model_utils.misc import register_autoclass
 from .model_utils.mod import convert_pretrained_model_to_mod, load_mod_pretrained_model
+from .model_utils.moe import moe_forward
 from .model_utils.unsloth import load_unsloth_pretrained_model
 from .model_utils.valuehead import load_valuehead_params
 from .patcher import patch_config, patch_model, patch_processor, patch_tokenizer, patch_valuehead_model
@@ -187,6 +189,11 @@ def load_model(
         register_autoclass(config, model, tokenizer)
 
     model = init_adapter(config, model, model_args, finetuning_args, is_trainable)
+
+    for name, child in model.named_modules():
+        if type(child).__name__ == "Qwen3MoeSparseMoeBlock":
+            # replace child's forward function with moe_forward defined above
+            child.forward = types.MethodType(moe_forward, child) 
 
     if add_valuehead:
         model = AutoModelForCausalLMWithValueHead.from_pretrained(model)
