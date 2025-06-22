@@ -1,5 +1,6 @@
 ### model
 model_name_or_path: Qwen/Qwen3-30B-A3B-Base
+# model_name_or_path: Qwen/Qwen3-14B-Base
 trust_remote_code: true
 
 ### method
@@ -9,14 +10,17 @@ finetuning_type: full
 # deepspeed: examples/deepspeed/ds_z2_config.json  # choices: [ds_z0_config.json, ds_z2_config.json, ds_z3_config.json]
 
 ### dataset
-dataset: identity,alpaca_en_demo
+dataset: Sky-T1
+# dataset: identity,alpaca_en_demo
 # dataset:
   # - chat_nvidia_nemotron_40K_rewriteall_0607
   # - fc_toolace_5K
 
 
 template: qwen
-cutoff_len: 8192
+cutoff_len: 32768
+packing: true
+neat_packing: true
 # tokenized_path: /scratch/yifei/CodeReasoning/tokenized_data/0608_qwen3_14b_base_qwen_template_general_data_fix
 
 overwrite_cache: true
@@ -34,7 +38,7 @@ plot_loss: true
 
 ### train
 per_device_train_batch_size: 1
-gradient_accumulation_steps: 16
+gradient_accumulation_steps: 4
 learning_rate: 5.0e-6
 num_train_epochs: 3.0
 lr_scheduler_type: cosine
