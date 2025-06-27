@@ -714,5 +714,19 @@
       "prompt": "content"
     },
     "folder": "python"
+  },
+  "Sky-T1": {
+    "file_name": "/scratch/yizhu1/sky_t1/Sky-T1_data_17k.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "conversations",
+      "system": "system"
+    },
+    "tags": {
+      "role_tag": "from",
+      "content_tag": "value",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
   }
 }
